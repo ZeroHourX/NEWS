@@ -23,12 +23,31 @@ const router = new VueRouter({
         { path: '/personal', component: Personal },
     ]
 })
+
+router.beforeEach((to, from, next) => {
+    const hasToken = localStorage.getItem("token")
+
+    if (to.path === "/personal") {
+        if (hasToken) {
+            next()
+        } else {
+            next("/login")
+        }
+    } else {
+        next()
+    }
+})
+
 // 添加响应拦截器
 axios.interceptors.response.use(res => {
-    if (res.data.statusCode === 401 || res.data.statusCode === 400) {
-        Toast.fail(res.data.message);
+    const { message, statusCode } = res.data;
+    if (statusCode === 401 || statusCode === 400) {
+        Toast.fail(message);
     }
 
+    if (message === "用户信息验证失败") {
+        router.push("/login")
+    }
     return res;
 })
 

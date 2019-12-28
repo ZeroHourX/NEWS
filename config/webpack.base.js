@@ -6,6 +6,8 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 // webpack.config.js
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
+const CopyPlugin = require("copy-webpack-plugin");
+
 
 module.exports = {
     entry: {
@@ -73,6 +75,9 @@ module.exports = {
         // 调用清除打包目录插件
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({ template: './plugin/index.html' }),
-        new VueLoaderPlugin()
+        new VueLoaderPlugin(),
+        new CopyPlugin([
+            { from: 'static', to: 'static' },
+        ]),
     ]
 }

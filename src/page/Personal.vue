@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="head_detala">
-      <img :src="$axios.defaults.baseURL + profile.head_img" alt />
+      <img :src="profile.head_img" alt />
       <div class="detala">
         <div class="name">
           <i class="iconfont icon-xingbie-nv"></i>
@@ -39,6 +39,13 @@ export default {
     }).then(res => {
       const { data } = res.data;
       this.profile = data;
+      if (data) {
+        if (data.head_img) {
+          this.profile.head_img = this.$axios.defaults.baseURL + data.head_img;
+        } else {
+          this.profile.head_img = "../static/moren.jpg";
+        }
+      }
     });
   }
 };
