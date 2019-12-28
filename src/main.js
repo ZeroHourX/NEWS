@@ -25,17 +25,19 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    const hasToken = localStorage.getItem("token")
+    // 是否有token
+    const hasToken = localStorage.getItem("token");
 
-    if (to.path === "/personal") {
+    // 是否是个人中心页
+    if (to.path === '/personal') {
         if (hasToken) {
-            next()
+            return next();
         } else {
-            next("/login")
+            // 没有token则跳转到登录页
+            return next("/login")
         }
-    } else {
-        next()
     }
+    next();
 })
 
 // 添加响应拦截器
@@ -45,8 +47,9 @@ axios.interceptors.response.use(res => {
         Toast.fail(message);
     }
 
-    if (message === "用户信息验证失败") {
-        router.push("/login")
+    if (message === "用户信息验证失败!") {
+        // 跳转到登录页
+        router.push("/login");
     }
     return res;
 })

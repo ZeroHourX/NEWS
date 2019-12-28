@@ -15,7 +15,7 @@
     <BarTab title="我的关注" text="关注的用户" />
     <BarTab title="我的跟帖" text="跟帖/收藏" />
     <BarTab title="我的收藏" text="文章/视频" />
-    <BarTab title="设置" />
+    <BarTab title="退出" @click="handleLogout" />
   </div>
 </template>
 
@@ -29,6 +29,13 @@ export default {
   },
   components: {
     BarTab
+  },
+  methods: {
+    handleLogout(){
+      localStorage.removeItem("token")
+      localStorage.removeItem("user_id")
+      this.$router.replace("/login")
+    }
   },
   mounted() {
     this.$axios({

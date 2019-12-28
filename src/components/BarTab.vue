@@ -1,6 +1,6 @@
 <template>
   <div class="bar">
-    <div class="tap">
+    <div class="tap" @click="$emit('click')">
       <div class="title">{{title}}</div>
       <div class="text">{{text}}</div>
       <i class="iconfont icon-you"></i>
