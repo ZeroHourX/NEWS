@@ -57,9 +57,13 @@ export default {
         method: "POST",
         data: this.form
       }).then(res => {
-        const { message } = res.data;
+        const { message,data } = res.data;
+        
         if (message === "登录成功") {
           this.$router.push("/personal");
+          
+          localStorage.setItem("token",data.token)
+          localStorage.setItem("user_id",data.user.id)
         }
       });
     }
