@@ -18,6 +18,14 @@
     />
 
     <AuthInput
+      type="text"
+      placeholder="昵称"
+      :rule="/^[0-9a-zA-z]{2,12}$/"
+      v-model="form.nickname"
+      err_message="昵称长度错误"
+    />
+
+    <AuthInput
       type="password"
       placeholder="密码"
       :rule="/^[0-9a-zA-z]{3,12}$/"
@@ -26,11 +34,11 @@
     />
 
     <p>
-      没有账号？
-      <router-link to="/Registration">立即注册</router-link>
+      有账号？
+      <router-link to="/login">立即登录</router-link>
     </p>
 
-    <AuthButton text="登录" @click="handleSubim" />
+    <AuthButton text="注册" @click="handleSubim" />
   </div>
 </template>
 
@@ -42,7 +50,8 @@ export default {
     return {
       form: {
         username: "",
-        password: ""
+        password: "",
+        nickname: ""
       }
     };
   },
@@ -52,16 +61,22 @@ export default {
   },
   methods: {
     handleSubim() {
-      this.$axios({
-        url: "/login",
-        method: "POST",
-        data: this.form
-      }).then(res => {
-        const { message } = res.data;
-        if (message === "登录成功") {
-          this.$router.push("/personal");
-        }
-      });
+      const { username, password, nickname } = this.form;
+      if (!username || !password || !nickname) {
+        return;
+      } else {
+        this.$axios({
+          url: "/register",
+          method: "POST",
+          data: this.form
+        }).then(res => {
+          const { message } = res.data;
+          if (message === "注册成功") {
+            this.$toast.success(message);
+            this.$router.push("/login");
+          }
+        });
+      }
     }
   }
 };

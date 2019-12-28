@@ -16,6 +16,6 @@ export default {
   text-align: center;
   color: #fff;
   padding: 10px;
-  margin-top: 3.125rem;
+  margin-top: 2.125rem;
 }
 </style>
