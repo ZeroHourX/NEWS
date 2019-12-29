@@ -8,7 +8,17 @@
         <van-uploader class="upload" :after-read="afterRead" />
       </div>
 
-      <BarTab title="昵称" :text="profile.nickname" />
+      <BarTab title="昵称" :text="profile.nickname" @click="showNickname = !showNickname" />
+      <van-dialog v-model="showNickname" title="编辑昵称" show-cancel-button @confirm="handNickname">
+        <van-field
+          :value="profile.nickname"
+          placeholder="请输入昵称"
+          maxlength="10"
+          show-word-limit
+          ref="nickname"
+        />
+      </van-dialog>
+
       <BarTab title="密码" :text="profile.password" type="password" />
       <BarTab title="性别" :text="profile.gender == 0 ? '女' : '男'" />
     </div>
@@ -18,10 +28,12 @@
 <script>
 import HeaderNormal from "@/components/HeaderNormal";
 import BarTab from "@/components/BarTab";
+import { log } from "util";
 export default {
   data() {
     return {
-      profile: {}
+      profile: {},
+      showNickname: false
     };
   },
   methods: {
@@ -42,18 +54,31 @@ export default {
         this.profile.head_img = this.$axios.defaults.baseURL + data.url;
 
         //实时修改后台数据头像
-        this.$axios({
-          url: "/user_update/" + localStorage.getItem("user_id"),
-          method: "POST",
-          headers: {
-            Authorization: localStorage.getItem("token")
-          },
-          data: {
-            head_img: data.url
-          }
-        }).then(res => {
-          this.$toast.success(res.data.message);
+        this.Axios("/user_update/", "POST", {
+          head_img: data.url
         });
+      });
+    },
+
+    handNickname() {
+      const { value } = this.$refs.nickname.$refs.input;
+      this.Axios("/user_update/", "POST", {
+        nickname: value
+      });
+      this.profile.nickname = value;
+    },
+
+    //自定义Axios函数
+    Axios(url, type, userinfo) {
+      this.$axios({
+        url: url + localStorage.getItem("user_id"),
+        method: type,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        },
+        data: userinfo
+      }).then(res => {
+        this.$toast.success(res.data.message);
       });
     }
   },
