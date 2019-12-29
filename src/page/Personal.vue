@@ -1,16 +1,18 @@
 <template>
   <div>
-    <div class="head_detala">
-      <img :src="profile.head_img" alt />
-      <div class="detala">
-        <div class="name">
-          <i class="iconfont icon-xingbie-nv"></i>
-          {{profile.nickname}}
+    <router-link to="/edit_profile">
+      <div class="head_detala">
+        <img :src="profile.head_img" alt />
+        <div class="detala">
+          <div class="name">
+            <i class="iconfont icon-xingbie-nv"></i>
+            {{profile.nickname}}
+          </div>
+          <div class="time">2019-10-10</div>
         </div>
-        <div class="time">2019-10-10</div>
+        <i class="iconfont icon-you"></i>
       </div>
-      <i class="iconfont icon-you"></i>
-    </div>
+    </router-link>
 
     <BarTab title="我的关注" text="关注的用户" />
     <BarTab title="我的跟帖" text="跟帖/收藏" />
@@ -31,10 +33,10 @@ export default {
     BarTab
   },
   methods: {
-    handleLogout(){
-      localStorage.removeItem("token")
-      localStorage.removeItem("user_id")
-      this.$router.replace("/login")
+    handleLogout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user_id");
+      this.$router.replace("/login");
     }
   },
   mounted() {

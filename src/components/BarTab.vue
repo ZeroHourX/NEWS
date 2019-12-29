@@ -2,7 +2,7 @@
   <div class="bar">
     <div class="tap" @click="$emit('click')">
       <div class="title">{{title}}</div>
-      <div class="text">{{text}}</div>
+      <div class="text">{{type=== "password" ? '******' : text}}</div>
       <i class="iconfont icon-you"></i>
     </div>
   </div>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  props: ["title", "text"]
+  props: ["title", "text", "type"]
 };
 </script>
 

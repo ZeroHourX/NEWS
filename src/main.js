@@ -9,6 +9,7 @@ import axios from 'axios'
 import Login from '@/page/Login'
 import Registration from "@/page/Registration"
 import Personal from "@/page/Personal"
+import EditProfile from "@/page/EditProfile"
 
 Vue.use(VueRouter)
 Vue.use(Vant);
@@ -21,6 +22,7 @@ const router = new VueRouter({
         { path: '/login', component: Login },
         { path: '/registration', component: Registration },
         { path: '/personal', component: Personal },
+        { path: '/edit_profile', component: EditProfile },
     ]
 })
 
