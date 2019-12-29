@@ -19,8 +19,30 @@
         />
       </van-dialog>
 
-      <BarTab title="密码" :text="profile.password" type="password" />
-      <BarTab title="性别" :text="profile.gender == 0 ? '女' : '男'" />
+      <BarTab
+        title="密码"
+        :text="profile.password"
+        type="password"
+        @click="showPassword = !showPassword"
+      />
+      <van-dialog v-model="showPassword" title="编辑密码" show-cancel-button @confirm="handPassword">
+        <van-field
+          :value="profile.password"
+          type="password"
+          placeholder="请输入密码"
+          maxlength="10"
+          show-word-limit
+          ref="password"
+        />
+      </van-dialog>
+
+      <BarTab title="性别" :text="profile.gender == 0 ? '女' : '男'" @click="showGender = !showGender" />
+      <van-action-sheet
+        v-model="showGender"
+        close-on-click-action
+        :actions="actions"
+        @select="onSelect"
+      />
     </div>
   </div>
 </template>
@@ -33,7 +55,10 @@ export default {
   data() {
     return {
       profile: {},
-      showNickname: false
+      showNickname: false,
+      showPassword: false,
+      showGender: false,
+      actions: [{ id: 1, name: "男" }, { id: 0, name: "女" }]
     };
   },
   methods: {
@@ -58,6 +83,21 @@ export default {
           head_img: data.url
         });
       });
+    },
+
+    handPassword() {
+      const { value } = this.$refs.password.$refs.input;
+      this.Axios("/user_update/", "POST", {
+        password: value
+      });
+      this.profile.password = value;
+    },
+
+    onSelect(item) {
+      this.Axios("/user_update/", "POST", {
+        gender: item.id
+      });
+      this.profile.gender = item.id;
     },
 
     handNickname() {
