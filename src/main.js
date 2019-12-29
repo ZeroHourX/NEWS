@@ -10,6 +10,7 @@ import Login from '@/page/Login'
 import Registration from "@/page/Registration"
 import Personal from "@/page/Personal"
 import EditProfile from "@/page/EditProfile"
+import UserFollows from "@/page/UserFollows"
 
 Vue.use(VueRouter)
 Vue.use(Vant);
@@ -23,6 +24,7 @@ const router = new VueRouter({
         { path: '/registration', component: Registration },
         { path: '/personal', component: Personal },
         { path: '/edit_profile', component: EditProfile },
+        { path: '/user_follows', component: UserFollows },
     ]
 })
 
