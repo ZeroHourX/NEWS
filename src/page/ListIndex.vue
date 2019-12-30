@@ -13,7 +13,15 @@
 
     <van-tabs v-model="active" sticky animated swipeable background="#e4e4e4">
       <van-tab v-for="(item,index) in category" :title="item.name" :key="index">
-        <PostList v-for="(item,index) in list" :key="index" :post="item" />
+        <van-list
+          v-model="item.loading"
+          :finished="item.finished"
+          finished-text="我也是有底线的( •̀ ω •́ )y"
+          @load="onLoad"
+          :immediate-check="false"
+        >
+          <PostList v-for="(item,index) in item.post" :key="index" :post="item" />
+        </van-list>
       </van-tab>
     </van-tabs>
   </div>
@@ -27,8 +35,33 @@ export default {
       active: localStorage.getItem("token") ? 1 : 0,
       category: [],
       cid: 999,
-      list: []
+      pageIndex: 1,
+      pageSize: 10
     };
+  },
+  methods: {
+    onLoad() {
+      // 异步更新数据
+      setTimeout(() => {
+        const categores = this.category[this.active];
+        // 文章列表
+        this.$axios({
+          url: `/post?pageIndex=${categores.pageIndex}&pageSize=${this.pageSize}&category=${this.cid}`
+        }).then(res => {
+          const { data } = res.data;
+          if (data.length < this.pageSize) {
+            // 数据全部加载完成
+            categores.finished = true;
+          }
+
+          categores.post = [...categores.post, ...data];
+
+          categores.pageIndex++;
+          // 加载状态结束
+          categores.loading = false;
+        });
+      }, 500);
+    }
   },
   mounted() {
     //栏目
@@ -40,25 +73,29 @@ export default {
       };
     }
     this.$axios(config).then(res => {
-      this.category = res.data.data;
-    });
-
-    // 文章列表
-    this.$axios({
-      url: `/post?pageIndex=1&pageSize=10&category=${this.cid}`
-    }).then(res => {
-      this.list = res.data.data;
+      const { data } = res.data;
+      const newData = [];
+      data.forEach(v => {
+        v.post = [];
+        v.loading = false;
+        v.finished = false;
+        v.pageIndex = 1;
+        newData.push(v);
+      });
+      this.category = newData;
+      // 文章列表
+      this.$axios({
+        url: `/post?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}&category=${this.cid}`
+      }).then(res => {
+        this.category[this.active].post = res.data.data;
+        this.category[this.active].pageIndex++;
+      });
     });
   },
   watch: {
     active() {
       this.cid = this.category[this.active].id;
-      // 文章列表
-      this.$axios({
-        url: `/post?pageIndex=1&pageSize=10&category=${this.cid}`
-      }).then(res => {
-        this.list = res.data.data;
-      });
+      this.onLoad();
     }
   },
   components: {
