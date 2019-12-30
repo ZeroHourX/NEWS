@@ -11,7 +11,7 @@
       </router-link>
     </div>
 
-    <van-tabs v-model="active" sticky animated swipeable background="#e4e4e4" @click="onClick">
+    <van-tabs v-model="active" sticky animated swipeable background="#e4e4e4">
       <van-tab v-for="(item,index) in category" :title="item.name" :key="index">
         <PostList v-for="(item,index) in list" :key="index" :post="item" />
       </van-tab>
@@ -29,17 +29,6 @@ export default {
       cid: 999,
       list: []
     };
-  },
-  methods: {
-    onClick(name, title) {
-      this.cid = this.category[this.active].id;
-      // 文章列表
-      this.$axios({
-        url: `/post?pageIndex=1&pageSize=10&category=${this.cid}`
-      }).then(res => {
-        this.list = res.data.data;
-      });
-    }
   },
   mounted() {
     //栏目
@@ -60,6 +49,17 @@ export default {
     }).then(res => {
       this.list = res.data.data;
     });
+  },
+  watch: {
+    active() {
+      this.cid = this.category[this.active].id;
+      // 文章列表
+      this.$axios({
+        url: `/post?pageIndex=1&pageSize=10&category=${this.cid}`
+      }).then(res => {
+        this.list = res.data.data;
+      });
+    }
   },
   components: {
     PostList
