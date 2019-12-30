@@ -14,7 +14,7 @@ export default {
 </script>
 
 <style>
-@import url(http://at.alicdn.com/t/font_1587733_nreu8gck57h.css);
+@import url(http://at.alicdn.com/t/font_1587733_428x6chhj3j.css);
 @import url(../node_modules/vant/lib/index.css);
 html,
 body,
