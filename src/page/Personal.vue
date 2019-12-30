@@ -1,5 +1,6 @@
 <template>
   <div>
+    <HeaderNormal title="个人中心" />
     <router-link to="/edit_profile">
       <div class="head_detala">
         <img :src="profile.head_img" alt />
@@ -26,13 +27,18 @@
     <router-link to="/user_follows">
       <BarTab title="我的关注" text="关注的用户" />
     </router-link>
-    <BarTab title="我的跟帖" text="跟帖/收藏" />
-    <BarTab title="我的收藏" text="文章/视频" />
+    <router-link to="/user_comments">
+      <BarTab title="我的跟帖" text="跟帖/收藏" />
+    </router-link>
+    <router-link to="/user_star">
+      <BarTab title="我的收藏" text="文章/视频" />
+    </router-link>
     <BarTab title="退出" @click="handleLogout" />
   </div>
 </template>
 
 <script>
+import HeaderNormal from "@/components/HeaderNormal";
 import BarTab from "@/components/BarTab";
 export default {
   data() {
@@ -41,7 +47,8 @@ export default {
     };
   },
   components: {
-    BarTab
+    BarTab,
+    HeaderNormal
   },
   methods: {
     handleLogout() {

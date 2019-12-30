@@ -11,6 +11,9 @@ import Registration from "@/page/Registration"
 import Personal from "@/page/Personal"
 import EditProfile from "@/page/EditProfile"
 import UserFollows from "@/page/UserFollows"
+import UserComments from "@/page/UserComments"
+import UserStar from "@/page/UserStar"
+import ListIndex from "@/page/ListIndex"
 
 Vue.use(VueRouter)
 Vue.use(Vant);
@@ -25,6 +28,9 @@ const router = new VueRouter({
         { path: '/personal', component: Personal },
         { path: '/edit_profile', component: EditProfile },
         { path: '/user_follows', component: UserFollows },
+        { path: '/user_comments', component: UserComments },
+        { path: '/user_star', component: UserStar },
+        { path: '/', component: ListIndex },
     ]
 })
 

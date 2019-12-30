@@ -62,7 +62,7 @@ export default {
         if (message === "登录成功") {
           localStorage.setItem("token", data.token);
           localStorage.setItem("user_id", data.user.id);
-          this.$router.push("/personal");
+          this.$router.push("/");
         }
       });
     }

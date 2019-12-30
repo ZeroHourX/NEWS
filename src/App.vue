@@ -14,9 +14,13 @@ export default {
 </script>
 
 <style>
-
 @import url(http://at.alicdn.com/t/font_1587733_nreu8gck57h.css);
 @import url(../node_modules/vant/lib/index.css);
+html,
+body,
+#app {
+  background: #f2f2f2;
+}
 /*清除内外边距  */
 * {
   margin: 0;

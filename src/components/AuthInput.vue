@@ -52,6 +52,7 @@ input {
   outline: none;
   background: #fff;
   font-size: 1.25rem;
+  background: #f2f2f2;
 }
 .success {
   border-bottom-color: green;
