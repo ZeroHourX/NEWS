@@ -3,27 +3,34 @@
     <!-- 一张图 -->
     <div class="img_one" v-if="post.cover.length > 0 && post.cover.length < 3 && post.type===1">
       <div class="title">
-        <p class="van-multi-ellipsis--l2">{{post.title}}</p>
+        <router-link :to="`/list_detail/${post.id}`">
+          <p class="van-multi-ellipsis--l2">{{post.title}}</p>
+        </router-link>
         <div class="user">
           <p>{{post.user.nickname}}</p>
           <p>{{post.comment_length}}跟帖</p>
         </div>
       </div>
-
-      <div class="img">
-        <img :src="post.cover[0].url" alt />
-      </div>
+      <router-link :to="`/list_detail/${post.id}`">
+        <div class="img">
+          <img :src="post.cover[0].url" alt />
+        </div>
+      </router-link>
     </div>
 
     <!-- 三张图 -->
     <div class="img_three" v-if="post.cover.length >= 3 && post.type===1">
       <div class="title">
-        <p class="van-multi-ellipsis--l2">{{post.title}}</p>
-        <div class="img_if">
-          <div class="img" v-for="(item,index) in post.cover" :key="index">
-            <img v-if="index < 3" :src="item.url" alt />
+        <router-link :to="`/list_detail/${post.id}`">
+          <p class="van-multi-ellipsis--l2">{{post.title}}</p>
+        </router-link>
+        <router-link :to="`/list_detail/${post.id}`">
+          <div class="img_if">
+            <div class="img" v-for="(item,index) in post.cover" :key="index">
+              <img v-if="index < 3" :src="item.url" alt />
+            </div>
           </div>
-        </div>
+        </router-link>
         <div class="user">
           <p>{{post.user.nickname}}</p>
           <p>{{post.comment_length}}跟帖</p>
@@ -34,13 +41,17 @@
     <!-- 视频 -->
     <div class="video" v-if="post.type === 2">
       <div class="title">
-        <p class="van-ellipsis">{{post.title}}</p>
-        <div class="img_if">
-          <div class="img">
-            <img :src="post.cover[0].url" alt />
-            <span class="video_tip"></span>
+        <router-link :to="`/list_detail/${post.id}`">
+          <p class="van-multi-ellipsis--l2">{{post.title}}</p>
+        </router-link>
+        <router-link :to="`/list_detail/${post.id}`">
+          <div class="img_if">
+            <div class="img">
+              <img :src="post.cover[0].url" alt />
+              <span class="video_tip"></span>
+            </div>
           </div>
-        </div>
+        </router-link>
         <div class="user">
           <p>{{post.user.nickname}}</p>
           <p>{{post.comment_length}}跟帖</p>

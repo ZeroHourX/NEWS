@@ -14,6 +14,7 @@ import UserFollows from "@/page/UserFollows"
 import UserComments from "@/page/UserComments"
 import UserStar from "@/page/UserStar"
 import ListIndex from "@/page/ListIndex"
+import ListDetail from "@/page/ListDetail"
 
 Vue.use(VueRouter)
 Vue.use(Vant);
@@ -31,6 +32,7 @@ const router = new VueRouter({
         { path: '/user_comments', component: UserComments },
         { path: '/user_star', component: UserStar },
         { path: '/', component: ListIndex },
+        { path: '/list_detail/:id', component: ListDetail },
     ]
 })
 
