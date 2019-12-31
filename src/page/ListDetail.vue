@@ -20,9 +20,9 @@
         </div>
 
         <div class="post_btn">
-          <div class="dz" :class="bg_red ? 'bg_red' : ''">
+          <div class="dz" :class="detail.has_like ? 'bg_red' : ''" @click="handlike">
             <i class="iconfont icon-dianzan"></i>
-            <span>99+</span>
+            <span>{{detail.like_length}}</span>
           </div>
           <div class="wx">
             <i class="iconfont icon-weixin"></i>
@@ -32,7 +32,7 @@
       </div>
     </div>
 
-    <PostFooter />
+    <PostFooter :post="detail" />
   </div>
 </template>
 
@@ -41,7 +41,6 @@ import PostFooter from "@/components/PostFooter";
 export default {
   data() {
     return {
-      bg_red: true,
       detail: {
         user: {}
       }
@@ -55,9 +54,8 @@ export default {
           Authorization: localStorage.getItem("token")
         }
       }).then(res => {
-        const { data } = res.data;
-        console.log(data);
         this.detail.has_follow = !this.detail.has_follow;
+        this.$toast.success(res.data.message);
       });
     },
     handunfollow() {
@@ -67,9 +65,24 @@ export default {
           Authorization: localStorage.getItem("token")
         }
       }).then(res => {
-        const { data } = res.data;
-        console.log(data);
         this.detail.has_follow = !this.detail.has_follow;
+        this.$toast.fail(res.data.message);
+      });
+    },
+    handlike() {
+      this.$axios({
+        url: "/post_like/" + this.detail.id,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        const { message } = res.data;
+        this.detail.has_like = !this.detail.has_like;
+        if (message === "点赞成功") {
+          this.detail.like_length++;
+        } else {
+          this.detail.like_length--;
+        }
       });
     }
   },

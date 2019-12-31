@@ -4,10 +4,10 @@
       <div class="btn_footer" @click="handClick">写跟贴</div>
       <div class="btn_icon">
         <div class="btn1">
-          <em>1020</em>
+          <em>{{post.comment_length}}</em>
           <i class="iconfont icon-pinglun1"></i>
         </div>
-        <div class="btn2">
+        <div :class="post.has_star ? 'btn2': ''" @click="handstar">
           <i class="iconfont icon-collect"></i>
         </div>
         <div class="btn3">
@@ -38,6 +38,7 @@
 
 <script>
 export default {
+  props: ["post"],
   data() {
     return {
       isfous: true,
@@ -60,6 +61,18 @@ export default {
     handSubim() {
       this.isfous = !this.isfous;
       this.value = "";
+    },
+    handstar() {
+      this.$axios({
+        url: "/post_star/" + this.post.id,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        const { message } = res.data;
+        this.post.has_star = !this.post.has_star;
+        this.$toast.success(message);
+      });
     }
   }
 };
@@ -112,6 +125,9 @@ export default {
       padding-left: 20px;
       i {
         font-size: 23/360 * 100vw;
+      }
+      .btn2 {
+        color: orange;
       }
       em {
         position: absolute;
