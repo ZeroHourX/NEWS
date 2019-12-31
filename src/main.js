@@ -59,7 +59,7 @@ axios.interceptors.response.use(res => {
         Toast.fail(message);
     }
 
-    if (message === "用户信息验证失败!") {
+    if (message === "用户信息验证失败!" || message === "用户信息验证失败") {
         // 跳转到登录页
         router.push("/login");
     }

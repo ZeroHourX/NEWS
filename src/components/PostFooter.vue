@@ -59,6 +59,7 @@ export default {
     handfocus() {},
     handSubim() {
       this.isfous = !this.isfous;
+      this.value = "";
     }
   }
 };
@@ -66,13 +67,12 @@ export default {
 
 <style scoped lang="less">
 .footer {
-  margin-top: 50px;
   border-top: 2px #e4e4e4 solid;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-
+  background: #f2f2f2;
   .textarea {
     display: flex;
     align-items: flex-end;

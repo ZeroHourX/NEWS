@@ -1,27 +1,22 @@
 <template>
-  <div>
+  <div class="main">
     <div class="bottom">
       <div class="conten">
         <div class="head">
           <i class="iconfont icon-zuo1" @click="$router.back()"></i>
           <i class="iconfont icon-new"></i>
-          <div class="foucs">关注</div>
-          <div class="foucs onfoucs" v-if="false">已关注</div>
+          <div class="foucs" v-if="!detail.has_follow" @click="handfollow">关注</div>
+          <div class="foucs onfoucs" v-else @click="handunfollow">已关注</div>
         </div>
 
         <div class="content">
-          <h3>瀑布流滚动加载，用于展示长列表，当列表即将滚动到底部时，会触发事件并加载更多列表项。</h3>
+          <h3>{{detail.title}}</h3>
           <div class="user">
-            <span>火星时报</span>
-            <span>1008611</span>
+            <span>{{detail.user.nickname}}</span>
+            <span>{{detail.user.username}}</span>
           </div>
 
-          <div class="contents">
-            瀑布流滚动加载，用于展示长列表，当列表即将滚动到底部时，会触发事件并加载更多列表项
-            瀑布流滚动加载，用于展示长列表，当列表即将滚动到底部时，会触发事件并加载更多列表项
-            瀑布流滚动加载，用于展示长列表，当列表即将滚动到底部时，会触发事件并加载更多列表项
-            瀑布流滚动加载，用于展示长列表，当列表即将滚动到底部时，会触发事件并加载更多列表项
-          </div>
+          <div class="contents" v-html="detail.content"></div>
         </div>
 
         <div class="post_btn">
@@ -46,8 +41,51 @@ import PostFooter from "@/components/PostFooter";
 export default {
   data() {
     return {
-      bg_red: true
+      bg_red: true,
+      detail: {
+        user: {}
+      }
     };
+  },
+  methods: {
+    handfollow() {
+      this.$axios({
+        url: "/user_follows/" + this.detail.user.id,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        const { data } = res.data;
+        console.log(data);
+        this.detail.has_follow = !this.detail.has_follow;
+      });
+    },
+    handunfollow() {
+      this.$axios({
+        url: "/user_unfollow/" + this.detail.user.id,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        const { data } = res.data;
+        console.log(data);
+        this.detail.has_follow = !this.detail.has_follow;
+      });
+    }
+  },
+  mounted() {
+    const config = {
+      url: "/post/" + this.$route.params.id
+    };
+    if (localStorage.getItem("token")) {
+      config.headers = {
+        Authorization: localStorage.getItem("token")
+      };
+    }
+    this.$axios(config).then(res => {
+      const { data } = res.data;
+      this.detail = data;
+    });
   },
   components: {
     PostFooter
@@ -56,6 +94,9 @@ export default {
 </script>
 
 <style scoped lang="less">
+.main {
+  padding-bottom: 80/360 * 100vw;
+}
 .bottom {
   border-bottom: 5px #e4e4e4 solid;
   padding-bottom: 20/360 * 100vw;
@@ -108,7 +149,14 @@ export default {
       .contents {
         font-size: 14/360 * 100vw;
         padding: 15px 0;
-        // line-height: 2;
+        line-height: 2;
+
+        /deep/img {
+          max-width: 100%;
+        }
+        /deep/p {
+          text-indent: 15px;
+        }
       }
     }
     .post_btn {
