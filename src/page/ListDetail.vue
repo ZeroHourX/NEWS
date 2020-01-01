@@ -20,6 +20,7 @@
         </div>
       </div>
 
+      <!-- 播放器功能待完善和学习 -->
       <div class="video" v-if="detail.type === 2">
         <div class="conten">
           <div class="head">
