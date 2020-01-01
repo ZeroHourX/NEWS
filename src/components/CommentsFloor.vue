@@ -5,7 +5,7 @@
     <div class="min_comments">
       <div class="warp_user">
         <div class="user">
-          <p>1</p>
+          <p>{{data.user.id}}</p>
           <p>{{data.user.nickname}}</p>
           <p>{{data.user.username}}</p>
         </div>

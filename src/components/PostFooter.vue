@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <div class="normal" v-if="isfous">
-      <div class="btn_footer" @click="handClick">写跟贴</div>
+      <div class="btn_footer van-ellipsis" @click="handClick">{{value ? value : '写跟贴'}}</div>
       <div class="btn_icon">
         <router-link :to="`/post_comments/${post.id}`">
           <div class="btn1">
@@ -33,7 +33,10 @@
           :disabled="false"
         />
       </van-cell-group>
-      <div class="textareas_btn" @click="handSubim">发送</div>
+      <div class="textareas_btn" @click="handSubim" v-if="!awaits">发送</div>
+      <div class="textareas_btn" @click="handSubim" v-if="awaits">
+        <span class="dot">...</span>
+      </div>
     </div>
   </div>
 </template>
@@ -44,7 +47,8 @@ export default {
   data() {
     return {
       isfous: true,
-      value: ""
+      value: "",
+      awaits: false
     };
   },
   methods: {
@@ -65,8 +69,29 @@ export default {
       });
     },
     handSubim() {
-      this.isfous = !this.isfous;
-      this.value = "";
+      if (!this.value) {
+        this.$toast.fail("发布内容不能为空");
+      } else {
+        this.awaits = true;
+        setTimeout(() => {
+          this.$axios({
+            url: "/post_comment/" + this.post.id,
+            method: "POST",
+            headers: {
+              Authorization: localStorage.getItem("token")
+            },
+            data: {
+              content: this.value
+            }
+          }).then(res => {
+            this.value = "";
+            this.isfous = !this.isfous;
+            this.awaits = false;
+            this.$toast.success(res.data.message);
+            this.$emit("getComments", this.post.id);
+          });
+        }, 1000);
+      }
     },
     handstar() {
       this.$axios({
@@ -118,7 +143,8 @@ export default {
     .btn_footer {
       width: 55%;
       line-height: 30/360 * 100vw;
-      text-indent: 20px;
+      padding: 0 20px;
+      box-sizing: border-box;
       border-radius: 50px;
       background: #d7d7d7;
     }
@@ -155,5 +181,69 @@ export default {
 /deep/.van-cell-group {
   background: #d7d7d7;
   border-radius: 10px;
+}
+
+//动态省略号
+.dot {
+  font-family: simsun;
+}
+
+:root .dot {
+  display: inline-block;
+  width: 1.5em;
+  vertical-align: bottom;
+  overflow: hidden;
+}
+
+@-webkit-keyframes dot {
+  0% {
+    width: 0;
+    margin-right: 1.5em;
+  }
+
+  33% {
+    width: 0.5em;
+    margin-right: 1em;
+  }
+
+  66% {
+    width: 1em;
+    margin-right: 0.5em;
+  }
+
+  100% {
+    width: 1.5em;
+    margin-right: 0;
+  }
+}
+
+.dot {
+  -webkit-animation: dot 3s infinite step-start;
+}
+
+@keyframes dot {
+  0% {
+    width: 0;
+    margin-right: 1.5em;
+  }
+
+  33% {
+    width: 0.5em;
+    margin-right: 1em;
+  }
+
+  66% {
+    width: 1em;
+    margin-right: 0.5em;
+  }
+
+  100% {
+    width: 1.5em;
+    margin-right: 0;
+  }
+}
+
+.dot {
+  animation: dot 1s infinite step-start;
 }
 </style>

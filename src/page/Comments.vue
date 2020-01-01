@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <PostFooter :post="detail" />
+    <PostFooter :post="detail" @getComments="getComments" />
   </div>
 </template>
 
@@ -39,24 +39,30 @@ export default {
     CommentsFloor,
     PostFooter
   },
-  mounted() {
-    this.$axios({
-      url: "/post_comment/" + this.$route.params.id
-    }).then(res => {
-      const { data } = res.data;
-      const newData = [];
-      data.forEach(v => {
-        if (!v.user.head_img) {
-          v.user.head_img = "/static/moren.jpg";
-        } else {
-          v.user.head_img = this.$axios.defaults.baseURL + v.user.head_img;
-        }
-        newData.push(v);
+  methods: {
+    getComments(id) {
+      this.$axios({
+        url: "/post_comment/" + id
+      }).then(res => {
+        const { data } = res.data;
+        const newData = [];
+        data.forEach(v => {
+          if (!v.user.head_img) {
+            v.user.head_img = "/static/moren.jpg";
+          } else {
+            v.user.head_img = this.$axios.defaults.baseURL + v.user.head_img;
+          }
+          newData.push(v);
+        });
+        this.data = newData;
       });
-      this.data = newData;
-    });
+    }
+  },
+  mounted() {
+    const { id } = this.$route.params;
+    this.getComments(id);
 
-    const config = { url: "/post/" + this.$route.params.id };
+    const config = { url: "/post/" + id };
 
     if (localStorage.getItem("token")) {
       config.headers = {
