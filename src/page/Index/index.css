@@ -1,0 +1,26 @@
+.head_search {
+  height: 11.11111111vw;
+  background: #ff0000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 10px;
+}
+.head_search .logo {
+  font-size: 13.88888889vw;
+  color: #fff;
+}
+.head_search .search {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.5);
+  padding: 5px 20px;
+  margin: 0 20px;
+  text-align: center;
+  color: #fff;
+  font-size: 14px;
+  border-radius: 50px;
+}
+.head_search .geren i {
+  font-size: 30px;
+  color: #fff;
+}

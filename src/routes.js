@@ -6,7 +6,7 @@ import EditProfile from "@/page/EditProfile"
 import UserFollows from "@/page/UserFollows"
 import UserComments from "@/page/UserComments"
 import UserStar from "@/page/UserStar"
-import ListIndex from "@/page/ListIndex"
+import ListIndex from "@/page/Index/ListIndex"
 import ListDetail from "@/page/ListDetail"
 
 const routes = [
