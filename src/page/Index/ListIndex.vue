@@ -2,7 +2,7 @@
   <div>
     <div class="head_search">
       <i class="iconfont icon-new logo"></i>
-      <router-link to="#" class="search">
+      <router-link to="/post_search" class="search">
         <i class="iconfont icon-sousuo"></i>
         <span>搜索新闻</span>
       </router-link>

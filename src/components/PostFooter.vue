@@ -12,9 +12,11 @@
         <div :class="post.has_star ? 'btn2': ''" @click="handstar">
           <i class="iconfont icon-collect"></i>
         </div>
-        <div class="btn3">
-          <i class="iconfont icon-fenxiang"></i>
-        </div>
+        <router-link to="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1">
+          <div class="btn3">
+            <i class="iconfont icon-fenxiang"></i>
+          </div>
+        </router-link>
       </div>
     </div>
 
@@ -113,7 +115,7 @@ export default {
             this.value = "";
             this.awaits = false;
             this.$toast.success(res.data.message);
-            this.$emit("getComments", this.post.id);
+            this.$emit("getComments", this.post.id, "isBtn");
             window.scrollTo(0, 0);
           });
         }, 1000);

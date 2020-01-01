@@ -2,22 +2,30 @@
   <div class="main">
     <HeaderNormal title="精彩跟帖" />
 
-    <div class="comments_warp" v-for="(item,index) in data" :key="index">
-      <div class="warp">
-        <div class="warp_btn">
-          <div class="warp_user">
-            <img :src="item.user.head_img" alt />
-            <div class="user">
-              <p>{{item.user.nickname}}</p>
-              <p>{{item.user.username}}</p>
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="我也是有底线的U•ェ•*U"
+      @load="onLoad"
+      :immediate-check="false"
+    >
+      <div class="comments_warp" v-for="(item,index) in data" :key="index">
+        <div class="warp">
+          <div class="warp_btn">
+            <div class="warp_user">
+              <img :src="item.user.head_img" alt />
+              <div class="user">
+                <p>{{item.user.nickname}}</p>
+                <p>{{item.user.username}}</p>
+              </div>
             </div>
+            <div class="btn" @click="handreplay(item)" @mousedown="handfocus">回复</div>
           </div>
-          <div class="btn" @click="handreplay(item)" @mousedown="handfocus">回复</div>
+          <CommentsFloor v-if="item.parent" :data="item.parent" />
+          <div class="title">{{item.content}}</div>
         </div>
-        <CommentsFloor v-if="item.parent" :data="item.parent" />
-        <div class="title">{{item.content}}</div>
       </div>
-    </div>
+    </van-list>
 
     <PostFooter
       :post="detail"
@@ -36,9 +44,13 @@ import PostFooter from "@/components/PostFooter";
 export default {
   data() {
     return {
-      data: {},
+      data: [],
       detail: {},
-      comments: {}
+      comments: {},
+      loading: false,
+      finished: false,
+      pageIndex: 1,
+      pageSize: 10
     };
   },
   components: {
@@ -47,12 +59,24 @@ export default {
     PostFooter
   },
   methods: {
+    onLoad() {
+      console.log(123);
+
+      const { id } = this.$route.params;
+      this.getComments(id);
+    },
     handreplay(item) {
       this.comments = item;
     },
-    getComments(id) {
+    getComments(id, isBtn) {
+      if (isBtn === "isBtn") {
+        this.pageIndex = 1;
+        this.loading = true;
+        this.finished = false;
+        this.data = [];
+      }
       this.$axios({
-        url: "/post_comment/" + id
+        url: `/post_comment/${id}?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
       }).then(res => {
         const { data } = res.data;
         const newData = [];
@@ -64,7 +88,13 @@ export default {
           }
           newData.push(v);
         });
-        this.data = newData;
+        this.data = [...this.data, ...newData];
+        this.loading = false;
+        if (data.length < this.pageSize) {
+          this.finished = true;
+          return;
+        }
+        this.pageIndex++;
       });
 
       const config = { url: "/post/" + id };
