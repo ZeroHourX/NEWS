@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="bottom">
-      <div class="conten">
+      <div class="conten" v-if="detail.type === 1">
         <div class="head">
           <i class="iconfont icon-zuo1" @click="$router.back()"></i>
           <i class="iconfont icon-new"></i>
@@ -18,16 +18,45 @@
 
           <div class="contents" v-html="detail.content"></div>
         </div>
+      </div>
 
-        <div class="post_btn">
-          <div class="dz" :class="detail.has_like ? 'bg_red' : ''" @click="handlike">
-            <i class="iconfont icon-dianzan"></i>
-            <span>{{detail.like_length}}</span>
+      <div class="video" v-if="detail.type === 2">
+        <div class="conten">
+          <div class="head">
+            <i class="iconfont icon-zuo1" @click="$router.back()"></i>
+            <i class="iconfont icon-new"></i>
           </div>
-          <div class="wx">
-            <i class="iconfont icon-weixin"></i>
+        </div>
+        <video controls autoplay name="media" ref="video" @mousemove="handpause">
+          <source :src="$route.params.id === '7' ? mp4 : detail.content" type="video/mp4" />
+        </video>
+        <div class="play" v-if="play" @click="handplay">
+          <i class="iconfont icon-bofang"></i>
+        </div>
+
+        <div class="user">
+          <div class="user_name">
+            <img :src="$axios.defaults.baseURL + detail.user.head_img" alt />
+            <span>{{detail.user.username}}</span>
+          </div>
+          <div class="user_btn">
+            <div class="foucs" v-if="!detail.has_follow" @click="handfollow">关注</div>
+            <div class="foucs onfoucs" v-else @click="handunfollow">已关注</div>
+          </div>
+        </div>
+        <h3>{{detail.title}}</h3>
+      </div>
+
+      <div class="post_btn">
+        <div class="dz" :class="detail.has_like ? 'bg_red' : ''" @click="handlike">
+          <i class="iconfont icon-dianzan"></i>
+          <span>{{detail.like_length}}</span>
+        </div>
+        <div class="wx">
+          <i class="iconfont icon-weixin"></i>
+          <a href="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1">
             <span>微信</span>
-          </div>
+          </a>
         </div>
       </div>
     </div>
@@ -38,12 +67,15 @@
 
 <script>
 import PostFooter from "@/components/PostFooter";
+
 export default {
   data() {
     return {
       detail: {
         user: {}
-      }
+      },
+      play: true,
+      mp4: "/static/shipin.mp4"
     };
   },
   methods: {
@@ -84,6 +116,16 @@ export default {
           this.detail.like_length--;
         }
       });
+    },
+    handplay() {
+      // this.$refs.video.play();
+      this.play = false;
+      this.$refs.video.pause();
+      // if (this.$refs.video.paused) {
+      // }
+    },
+    handpause() {
+      console.log(this.$refs.video.paused);
     }
   },
   mounted() {
@@ -130,21 +172,6 @@ export default {
         margin-left: 5px;
         color: #000;
       }
-      .foucs {
-        background: #f00;
-        color: #fff;
-        width: 62/360 * 100vw;
-        height: 26/360 * 100vw;
-        line-height: 26/360 * 100vw;
-        text-align: center;
-        border-radius: 50px;
-      }
-      .onfoucs {
-        background: #f2f2f2;
-        color: #bbb;
-        border: 1px #bbb solid;
-        box-sizing: border-box;
-      }
     }
 
     .content {
@@ -172,31 +199,89 @@ export default {
         }
       }
     }
-    .post_btn {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      margin-top: 15px;
-      div {
-        border: 1px #bbb solid;
-        border-radius: 50px;
-        width: 79/360 * 100vw;
-        height: 29/360 * 100vw;
-        line-height: 29/360 * 100vw;
-        text-align: center;
-        box-sizing: border-box;
-      }
-      .bg_red {
-        background: #f00;
-        color: #fff;
-        border: 0;
-      }
-      .wx {
-        i {
-          color: #06c806;
-        }
+  }
+  .post_btn {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 15px;
+    div {
+      border: 1px #bbb solid;
+      border-radius: 50px;
+      width: 79/360 * 100vw;
+      height: 29/360 * 100vw;
+      line-height: 29/360 * 100vw;
+      text-align: center;
+      box-sizing: border-box;
+    }
+    .bg_red {
+      background: #f00;
+      color: #fff;
+      border: 0;
+    }
+    .wx {
+      i {
+        color: #06c806;
       }
     }
   }
+}
+.video {
+  position: relative;
+  padding-bottom: 10px;
+  video {
+    width: 100%;
+  }
+  .play {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 58/360 * 100vw;
+    height: 58/360 * 100vw;
+    line-height: 58/360 * 100vw;
+    background: rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    i {
+      color: #fff;
+    }
+  }
+  h3 {
+    padding: 0 10px;
+  }
+  .user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    .user_name {
+      span {
+        vertical-align: middle;
+        margin-left: 5px;
+      }
+    }
+    img {
+      width: 25/360 * 100vw;
+      height: 25/360 * 100vw;
+      border-radius: 50%;
+    }
+  }
+}
+
+.foucs {
+  background: #f00;
+  color: #fff;
+  width: 62/360 * 100vw;
+  height: 26/360 * 100vw;
+  line-height: 26/360 * 100vw;
+  text-align: center;
+  border-radius: 50px;
+}
+.onfoucs {
+  background: #f2f2f2;
+  color: #bbb;
+  border: 1px #bbb solid;
+  box-sizing: border-box;
 }
 </style>

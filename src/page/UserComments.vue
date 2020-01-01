@@ -15,7 +15,7 @@
 
       <div class="comment">
         <p>{{item.content}}</p>
-        <router-link to="#">
+        <router-link :to="`/list_detail/${item.post.id}`">
           <span class="van-ellipsis">原文：{{item.post.title}}</span>
           <i class="iconfont icon-you-"></i>
         </router-link>
