@@ -6,12 +6,18 @@
         <i class="iconfont icon-sousuo"></i>
         <input type="text" placeholder="搜索关键字" v-model="value" @input="handinput" />
       </div>
-      <div class="btn">搜索</div>
+      <div class="btn" @click="getList">搜索</div>
     </div>
 
-    <div class="drop_down">
-      <div class="item">
-        <p>花露水的妙用</p>
+    <div class="drop_down" v-if="value">
+      <div
+        class="item"
+        v-for="(item,index) in newList"
+        v-if="index < 5"
+        :key="index"
+        @click="$router.push(`/list_detail/${item.id}`)"
+      >
+        <p>{{item.title}}</p>
         <i class="iconfont icon-you"></i>
       </div>
     </div>
@@ -26,12 +32,26 @@ export default {
   data() {
     return {
       value: "",
-      list: []
+      list: [],
+      newList: []
     };
   },
   methods: {
     handinput() {
-      console.log(this.value);
+      this.$axios({
+        url: `/post_search?keyword=${this.value}`
+      }).then(res => {
+        this.newList = res.data.data;
+      });
+    },
+    getList() {
+      this.$axios({
+        url: `/post_search?keyword=${this.value}`
+      }).then(res => {
+        this.list = res.data.data;
+      });
+      this.list = this.newList;
+      this.value = "";
     }
   },
   mounted() {
@@ -50,6 +70,24 @@ export default {
 <style scoped lang="less">
 .main {
   padding: 0 10/360 * 100vw;
+  .drop_down {
+    padding: 0 20px;
+    border: 2px #ccc solid;
+    border-top: 0;
+    position: absolute;
+    top: 59/360 * 100vw;
+    left: 0;
+    background: #f2f2f2;
+    box-sizing: border-box;
+  }
+  .item {
+    padding: 10px 0;
+    font-size: 15px;
+    border-bottom-color: #ddd;
+    i {
+      color: #bbb;
+    }
+  }
   .head_search {
     display: flex;
     justify-content: space-between;
