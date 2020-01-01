@@ -3,7 +3,7 @@
     <div class="normal" v-if="isfous">
       <div class="btn_footer" @click="handClick">写跟贴</div>
       <div class="btn_icon">
-        <div class="btn1">
+        <div class="btn1" @click="$router.push(`/post_comments/${post.id}`)">
           <em>{{post.comment_length}}</em>
           <i class="iconfont icon-pinglun1"></i>
         </div>

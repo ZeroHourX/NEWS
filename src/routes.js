@@ -8,6 +8,7 @@ import UserComments from "@/page/UserComments"
 import UserStar from "@/page/UserStar"
 import ListIndex from "@/page/Index/ListIndex"
 import ListDetail from "@/page/ListDetail"
+import Comments from "@/page/Comments"
 
 const routes = [
     // dynamic segments start with a colon
@@ -20,6 +21,7 @@ const routes = [
     { path: '/user_star', component: UserStar },
     { path: '/', component: ListIndex },
     { path: '/list_detail/:id', component: ListDetail },
+    { path: '/post_comments/:id', component: Comments },
 ]
 
 export default routes;
