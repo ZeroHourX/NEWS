@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <HeaderNormal title="精彩跟帖" />
 
     <div class="comments_warp" v-for="(item,index) in data" :key="index">
@@ -18,21 +18,26 @@
         <div class="title">{{item.content}}</div>
       </div>
     </div>
+
+    <PostFooter :post="detail" />
   </div>
 </template>
 
 <script>
 import HeaderNormal from "@/components/HeaderNormal";
 import CommentsFloor from "@/components/CommentsFloor";
+import PostFooter from "@/components/PostFooter";
 export default {
   data() {
     return {
-      data: {}
+      data: {},
+      detail: {}
     };
   },
   components: {
     HeaderNormal,
-    CommentsFloor
+    CommentsFloor,
+    PostFooter
   },
   mounted() {
     this.$axios({
@@ -50,11 +55,26 @@ export default {
       });
       this.data = newData;
     });
+
+    const config = { url: "/post/" + this.$route.params.id };
+
+    if (localStorage.getItem("token")) {
+      config.headers = {
+        Authorization: localStorage.getItem("token")
+      };
+    }
+    this.$axios(config).then(res => {
+      const { data } = res.data;
+      this.detail = data;
+    });
   }
 };
 </script>
 
 <style scoped lang="less">
+.main {
+  margin-bottom: 100/360 * 100vw;
+}
 .comments_warp {
   border-bottom: 1px #bbb solid;
   .warp {

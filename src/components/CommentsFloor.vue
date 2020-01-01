@@ -27,6 +27,7 @@ export default {
 .min_comments {
   padding: 15/360 * 100vw;
   border: 1px #ddd solid;
+  border-radius: 10px;
   .warp_user {
     display: flex;
     justify-content: space-between;

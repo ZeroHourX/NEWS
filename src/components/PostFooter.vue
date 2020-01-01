@@ -3,10 +3,12 @@
     <div class="normal" v-if="isfous">
       <div class="btn_footer" @click="handClick">写跟贴</div>
       <div class="btn_icon">
-        <div class="btn1" @click="$router.push(`/post_comments/${post.id}`)">
-          <em>{{post.comment_length}}</em>
-          <i class="iconfont icon-pinglun1"></i>
-        </div>
+        <router-link :to="`/post_comments/${post.id}`">
+          <div class="btn1">
+            <em>{{post.comment_length}}</em>
+            <i class="iconfont icon-pinglun1"></i>
+          </div>
+        </router-link>
         <div :class="post.has_star ? 'btn2': ''" @click="handstar">
           <i class="iconfont icon-collect"></i>
         </div>
@@ -57,7 +59,11 @@ export default {
     handblus() {
       this.isfous = !this.isfous;
     },
-    handfocus() {},
+    handfocus(event) {
+      event.preventDefault(() => {
+        this.$refs.focus.focus();
+      });
+    },
     handSubim() {
       this.isfous = !this.isfous;
       this.value = "";
