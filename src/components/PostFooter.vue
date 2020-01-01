@@ -18,7 +18,7 @@
       </div>
     </div>
 
-    <div class="textarea" v-else @mouseleave="handblus" @mousedown="handfocus">
+    <div class="textarea" v-else @mousedown="handfocus">
       <van-cell-group class="textareas">
         <van-field
           v-model="value"
@@ -26,11 +26,12 @@
           autosize
           type="textarea"
           maxlength="50"
-          placeholder="@:火星网友"
+          :placeholder="placeholder"
           show-word-limit
           :clearable="true"
           ref="focus"
           :disabled="false"
+          @blur="handunblur"
         />
       </van-cell-group>
       <div class="textareas_btn" @click="handSubim" v-if="!awaits">发送</div>
@@ -43,13 +44,22 @@
 
 <script>
 export default {
-  props: ["post"],
+  props: ["post", "comments"],
   data() {
     return {
       isfous: true,
       value: "",
-      awaits: false
+      awaits: false,
+      placeholder: "我来说两句"
     };
+  },
+  watch: {
+    comments() {
+      if (this.isfous) {
+        this.handClick();
+      }
+      this.placeholder = "@" + this.comments.user.nickname;
+    }
   },
   methods: {
     handClick() {
@@ -60,8 +70,17 @@ export default {
         }
       });
     },
+    handunblur() {
+      this.handblus();
+    },
     handblus() {
       this.isfous = !this.isfous;
+      if (!this.value) {
+        if (!this.comments) {
+          this.$emit("handreplay", null);
+        }
+        this.placeholder = "我来说两句";
+      }
     },
     handfocus(event) {
       event.preventDefault(() => {
@@ -73,6 +92,15 @@ export default {
         this.$toast.fail("发布内容不能为空");
       } else {
         this.awaits = true;
+
+        const data = {
+          content: this.value
+        };
+
+        if (this.placeholder !== "我来说两句") {
+          data.parent_id = this.comments.id;
+        }
+
         setTimeout(() => {
           this.$axios({
             url: "/post_comment/" + this.post.id,
@@ -80,17 +108,16 @@ export default {
             headers: {
               Authorization: localStorage.getItem("token")
             },
-            data: {
-              content: this.value
-            }
+            data
           }).then(res => {
             this.value = "";
-            this.isfous = !this.isfous;
             this.awaits = false;
             this.$toast.success(res.data.message);
             this.$emit("getComments", this.post.id);
+            window.scrollTo(0, 0);
           });
         }, 1000);
+        this.isfous = false;
       }
     },
     handstar() {

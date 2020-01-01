@@ -9,7 +9,7 @@
           <p>{{data.user.nickname}}</p>
           <p>{{data.user.username}}</p>
         </div>
-        <div class="btn">回复</div>
+        <!-- <div class="btn">回复</div> -->
       </div>
       <div class="title">{{data.content}}</div>
     </div>

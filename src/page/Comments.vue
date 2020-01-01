@@ -12,14 +12,20 @@
               <p>{{item.user.username}}</p>
             </div>
           </div>
-          <div class="btn">回复</div>
+          <div class="btn" @click="handreplay(item)" @mousedown="handfocus">回复</div>
         </div>
         <CommentsFloor v-if="item.parent" :data="item.parent" />
         <div class="title">{{item.content}}</div>
       </div>
     </div>
 
-    <PostFooter :post="detail" @getComments="getComments" />
+    <PostFooter
+      :post="detail"
+      @handreplay="handreplay"
+      @getComments="getComments"
+      :comments="comments"
+      ref="footer"
+    />
   </div>
 </template>
 
@@ -31,7 +37,8 @@ export default {
   data() {
     return {
       data: {},
-      detail: {}
+      detail: {},
+      comments: {}
     };
   },
   components: {
@@ -40,6 +47,9 @@ export default {
     PostFooter
   },
   methods: {
+    handreplay(item) {
+      this.comments = item;
+    },
     getComments(id) {
       this.$axios({
         url: "/post_comment/" + id
@@ -56,23 +66,26 @@ export default {
         });
         this.data = newData;
       });
+
+      const config = { url: "/post/" + id };
+
+      if (localStorage.getItem("token")) {
+        config.headers = {
+          Authorization: localStorage.getItem("token")
+        };
+      }
+      this.$axios(config).then(res => {
+        const { data } = res.data;
+        this.detail = data;
+      });
+    },
+    handfocus() {
+      this.$refs.footer.handfocus(event);
     }
   },
   mounted() {
     const { id } = this.$route.params;
     this.getComments(id);
-
-    const config = { url: "/post/" + id };
-
-    if (localStorage.getItem("token")) {
-      config.headers = {
-        Authorization: localStorage.getItem("token")
-      };
-    }
-    this.$axios(config).then(res => {
-      const { data } = res.data;
-      this.detail = data;
-    });
   }
 };
 </script>
