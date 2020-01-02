@@ -80,12 +80,12 @@
         </div>
       </div>
       <h4
-        v-if="comments.length > 0 && comments.length > 2"
+        v-if="detail.comment_length > 0 && detail.comment_length > 2"
         class="bor_btn"
         @click="$router.push(`/post_comments/${$route.params.id}`)"
       >更多跟贴</h4>
 
-      <div class="shafa" v-if="comments.length = 0">暂无跟贴,抢占沙发</div>
+      <div class="shafa" v-if="detail.comment_length === 0">暂无跟贴,抢占沙发</div>
     </div>
 
     <PostFooter :post="detail" @getComments="getComments" />
