@@ -21,7 +21,7 @@
             </div>
             <div class="btn" @click="handreplay(item)" @mousedown="handfocus">回复</div>
           </div>
-          <CommentsFloor v-if="item.parent" :data="item.parent" />
+          <CommentsFloor v-if="item.parent" :data="item.parent" :index="index" />
           <div class="title">{{item.content}}</div>
         </div>
       </div>

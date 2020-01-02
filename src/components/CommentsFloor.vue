@@ -5,7 +5,7 @@
     <div class="min_comments">
       <div class="warp_user">
         <div class="user">
-          <p>{{data.user.id}}</p>
+          <p>{{index}}</p>
           <p>{{data.user.nickname}}</p>
           <p>{{data.user.username}}</p>
         </div>
@@ -19,7 +19,7 @@
 <script>
 export default {
   name: "comments",
-  props: ["data"]
+  props: ["data", "index"]
 };
 </script>
 

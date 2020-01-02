@@ -1,26 +1,33 @@
 <template>
   <div>
     <HeaderNormal title="我的跟帖" />
+    <van-list
+      v-model="loading"
+      :finished="finished"
+      finished-text="我也是有底线的U•ェ•*U"
+      @load="onLoad"
+      :immediate-check="false"
+    >
+      <div class="comment-item" v-for="(item,index) in parent" :key="index">
+        <div class="time">
+          <span>2019-{{11+index}}-{{1+index}}</span>
+          <span>{{0+index >= 24 ? 0 : 0+index}}:04</span>
+        </div>
 
-    <div class="comment-item" v-for="(item,index) in parent" :key="index">
-      <div class="time">
-        <span>2019-12-30</span>
-        <span>05:04</span>
-      </div>
+        <div class="comments" v-if="item.parent">
+          <p>回复：{{item.parent.user.nickname}}</p>
+          <p>{{item.parent.content}}</p>
+        </div>
 
-      <div class="comments" v-if="item.parent">
-        <p>回复：{{item.parent.user.nickname}}</p>
-        <p>{{item.parent.content}}</p>
+        <div class="comment">
+          <p>{{item.content}}</p>
+          <router-link :to="`/list_detail/${item.post.id}`">
+            <span class="van-ellipsis">原文：{{item.post.title}}</span>
+            <i class="iconfont icon-you-"></i>
+          </router-link>
+        </div>
       </div>
-
-      <div class="comment">
-        <p>{{item.content}}</p>
-        <router-link :to="`/list_detail/${item.post.id}`">
-          <span class="van-ellipsis">原文：{{item.post.title}}</span>
-          <i class="iconfont icon-you-"></i>
-        </router-link>
-      </div>
-    </div>
+    </van-list>
   </div>
 </template>
 
@@ -29,22 +36,36 @@ import HeaderNormal from "@/components/HeaderNormal";
 export default {
   data() {
     return {
-      parent: {}
+      parent: [],
+      loading: false,
+      finished: false,
+      pageIndex: 1,
+      pageSize: 10
     };
+  },
+  methods: {
+    onLoad() {
+      this.$axios({
+        url: `/user_comments?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`,
+        headers: {
+          Authorization: localStorage.getItem("token")
+        }
+      }).then(res => {
+        const { data } = res.data;
+        if (data.length < this.pageSize) {
+          this.finished = true;
+        }
+        this.loading = false;
+        this.parent = [...this.parent, ...data];
+        this.pageIndex++;
+      });
+    }
   },
   components: {
     HeaderNormal
   },
   mounted() {
-    this.$axios({
-      url: "/user_comments",
-      headers: {
-        Authorization: localStorage.getItem("token")
-      }
-    }).then(res => {
-      const { data } = res.data;
-      this.parent = data;
-    });
+    this.onLoad();
   }
 };
 </script>

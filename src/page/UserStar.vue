@@ -12,9 +12,7 @@ import PostList from "@/components/PostList";
 export default {
   data() {
     return {
-      detail: {
-        user: {}
-      }
+      detail: []
     };
   },
   mounted() {
@@ -31,7 +29,6 @@ export default {
         newData.push(v);
       });
       this.detail = newData;
-      console.log(newData);
     });
   },
   components: {
