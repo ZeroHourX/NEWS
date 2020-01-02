@@ -126,7 +126,7 @@ export default {
       // }
     },
     handpause() {
-      console.log(this.$refs.video.paused);
+      // console.log(this.$refs.video.paused);
     }
   },
   mounted() {

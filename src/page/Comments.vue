@@ -60,8 +60,6 @@ export default {
   },
   methods: {
     onLoad() {
-      console.log(123);
-
       const { id } = this.$route.params;
       this.getComments(id);
     },
