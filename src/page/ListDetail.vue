@@ -28,7 +28,13 @@
             <i class="iconfont icon-new"></i>
           </div>
         </div>
-        <Video :data="detail" />
+        <video controls autoplay name="media" ref="video" @mousemove="handpause">
+          <source :src="$route.params.id === '7' ? mp4 : detail.content" type="video/mp4" />
+        </video>
+        <div class="play" v-if="play" @click="handplay">
+          <i class="iconfont icon-bofang"></i>
+        </div>
+
         <div class="user">
           <div class="user_name">
             <img :src="$axios.defaults.baseURL + detail.user.head_img" alt />
@@ -89,7 +95,6 @@
 <script>
 import PostFooter from "@/components/PostFooter";
 import CommentsFloor from "@/components/CommentsFloor";
-import Video from "@/components/Video";
 
 export default {
   data() {
@@ -97,6 +102,8 @@ export default {
       detail: {
         user: {}
       },
+      play: true,
+      mp4: "/static/shipin.mp4",
       comments: []
     };
   },
@@ -139,7 +146,16 @@ export default {
         }
       });
     },
-
+    handplay() {
+      // this.$refs.video.play();
+      this.play = false;
+      this.$refs.video.pause();
+      // if (this.$refs.video.paused) {
+      // }
+    },
+    handpause() {
+      // console.log(this.$refs.video.paused);
+    },
     getComments() {
       this.$axios({
         url: "/post_comment/" + this.$route.params.id
@@ -176,8 +192,7 @@ export default {
   },
   components: {
     PostFooter,
-    CommentsFloor,
-    Video
+    CommentsFloor
   }
 };
 </script>
@@ -267,8 +282,26 @@ export default {
   }
 }
 .video {
+  position: relative;
   padding-bottom: 10px;
-
+  video {
+    width: 100%;
+  }
+  .play {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    width: 58/360 * 100vw;
+    height: 58/360 * 100vw;
+    line-height: 58/360 * 100vw;
+    background: rgba(0, 0, 0, 0.2);
+    text-align: center;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    i {
+      color: #fff;
+    }
+  }
   h3 {
     padding: 0 10px;
   }
