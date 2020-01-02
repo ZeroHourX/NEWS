@@ -21,6 +21,8 @@
           :immediate-check="false"
         >
           <PostList v-for="(item,index) in item.post" :key="index" :post="item" />
+
+          <van-loading color="#1989fa" v-if="item.post.length ===0 && !item.finished" />
         </van-list>
       </van-tab>
     </van-tabs>
