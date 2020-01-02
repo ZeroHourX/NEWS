@@ -10,6 +10,7 @@ import ListIndex from "@/page/Index/ListIndex"
 import ListDetail from "@/page/ListDetail"
 import Comments from "@/page/Comments"
 import PostSearch from "@/page/PostSearch"
+import Category from "@/page/Category"
 
 const routes = [
     // dynamic segments start with a colon
@@ -24,6 +25,7 @@ const routes = [
     { path: '/list_detail/:id', component: ListDetail },
     { path: '/post_comments/:id', component: Comments },
     { path: '/post_search', component: PostSearch },
+    { path: '/category', component: Category },
 ]
 
 export default routes;

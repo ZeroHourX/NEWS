@@ -28,3 +28,13 @@
   text-align: center;
   padding: 20px;
 }
+ /deep/ .van-tabs--line .van-tabs__wrap {
+  margin-right: 13.88888889vw;
+}
+.xia_btn {
+  position: absolute;
+  right: 0;
+  background: #e4e4e4;
+  padding: 10px 15px;
+  z-index: 99;
+}

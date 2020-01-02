@@ -10,9 +10,18 @@
         <i class="iconfont icon-geren11"></i>
       </router-link>
     </div>
-
+    <router-link to="/category">
+      <div class="xia_btn">
+        <i class="iconfont icon-xia"></i>
+      </div>
+    </router-link>
     <van-tabs v-model="active" sticky animated swipeable background="#e4e4e4">
-      <van-tab v-for="(item,index) in category" :title="item.name" :key="index">
+      <van-tab
+        v-for="(item,index) in category"
+        :title="item.name"
+        :key="index"
+        v-if="item.is_top === 1"
+      >
         <van-list
           v-model="item.loading"
           :finished="item.finished"
