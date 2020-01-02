@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <!-- //占位组件 -->
-    <router-view></router-view>
+    <keep-alive include="index,search">
+      <!-- //占位组件 -->
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 

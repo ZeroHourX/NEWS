@@ -2,6 +2,7 @@ import PostList from "@/components/PostList";
 
 
 export default {
+    name: "index",
     data() {
         return {
             active: localStorage.getItem("token") ? 1 : 0,

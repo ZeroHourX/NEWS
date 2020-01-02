@@ -35,6 +35,7 @@
 <script>
 import PostList from "@/components/PostList";
 export default {
+  name: "search",
   data() {
     return {
       value: "",
@@ -52,15 +53,13 @@ export default {
       });
     },
     getList() {
-      if (this.value) {
-        this.$axios({
-          url: `/post_search?keyword=${this.value}`
-        }).then(res => {
-          this.isFocus = false;
-          this.list = res.data.data;
-        });
-        this.list = this.newList;
-      }
+      this.$axios({
+        url: `/post_search?keyword=${this.value}`
+      }).then(res => {
+        this.isFocus = false;
+        this.list = res.data.data;
+      });
+      this.list = this.newList;
     }
   },
   mounted() {
@@ -70,6 +69,16 @@ export default {
       this.list = res.data.data;
       this.newList = this.list;
     });
+  },
+  beforeRouteEnter(to, from, next) {
+    if (from.path === "/") {
+      next(mv => {
+        mv.newList = [];
+        mv.value = "";
+      });
+    } else {
+      next();
+    }
   },
   components: {
     PostList
