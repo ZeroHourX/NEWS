@@ -12,7 +12,9 @@
         <div :class="post.has_star ? 'btn2': ''" @click="handstar">
           <i class="iconfont icon-collect"></i>
         </div>
-        <router-link to="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1">
+        <router-link
+          to="https://developers.weixin.qq.com/doc/offiaccount/OA_Web_Apps/JS-SDK.html#1"
+        >
           <div class="btn3">
             <i class="iconfont icon-fenxiang"></i>
           </div>

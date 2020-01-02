@@ -62,12 +62,39 @@
       </div>
     </div>
 
-    <PostFooter :post="detail" />
+    <div class="comments">
+      <h3>精彩跟帖</h3>
+      <div class="comments_warp" v-for="(item,index) in comments" :key="index" v-if="index < 2">
+        <div class="warp">
+          <div class="warp_btn">
+            <div class="warp_user">
+              <img :src="item.user.head_img" alt />
+              <div class="user">
+                <p>{{item.user.nickname}}</p>
+                <p>{{item.user.username}}</p>
+              </div>
+            </div>
+          </div>
+          <CommentsFloor v-if="item.parent" :data="item.parent" :index="index" />
+          <div class="title">{{item.content}}</div>
+        </div>
+      </div>
+      <h4
+        v-if="comments.length > 0 && comments.length > 2"
+        class="bor_btn"
+        @click="$router.push(`/post_comments/${$route.params.id}`)"
+      >更多跟贴</h4>
+
+      <div class="shafa" v-if="comments.length = 0">暂无跟贴,抢占沙发</div>
+    </div>
+
+    <PostFooter :post="detail" @getComments="getComments" />
   </div>
 </template>
 
 <script>
 import PostFooter from "@/components/PostFooter";
+import CommentsFloor from "@/components/CommentsFloor";
 
 export default {
   data() {
@@ -76,7 +103,8 @@ export default {
         user: {}
       },
       play: true,
-      mp4: "/static/shipin.mp4"
+      mp4: "/static/shipin.mp4",
+      comments: []
     };
   },
   methods: {
@@ -127,6 +155,23 @@ export default {
     },
     handpause() {
       // console.log(this.$refs.video.paused);
+    },
+    getComments() {
+      this.$axios({
+        url: "/post_comment/" + this.$route.params.id
+      }).then(res => {
+        const { data } = res.data;
+        const newData = [];
+        data.forEach(v => {
+          if (!v.user.head_img) {
+            v.user.head_img = "/static/moren.jpg";
+          } else {
+            v.user.head_img = this.$axios.defaults.baseURL + v.user.head_img;
+          }
+          newData.push(v);
+        });
+        this.comments = newData;
+      });
     }
   },
   mounted() {
@@ -142,14 +187,23 @@ export default {
       const { data } = res.data;
       this.detail = data;
     });
+
+    this.getComments();
   },
   components: {
-    PostFooter
+    PostFooter,
+    CommentsFloor
   }
 };
 </script>
 
 <style scoped lang="less">
+.shafa {
+  color: #bbb;
+  padding: 30px;
+  text-align: center;
+  font-size: 14px;
+}
 .main {
   padding-bottom: 80/360 * 100vw;
 }
@@ -284,5 +338,54 @@ export default {
   color: #bbb;
   border: 1px #bbb solid;
   box-sizing: border-box;
+}
+
+.comments {
+  padding: 20px 0;
+  h3 {
+    text-align: center;
+  }
+  .bor_btn {
+    display: block;
+    width: 100/360 * 100vw;
+    height: 30/360 * 100vw;
+    line-height: 30/360 * 100vw;
+    border: 1px #bbb solid;
+    border-radius: 50px;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 10px;
+  }
+  .comments_warp {
+    border-bottom: 1px #bbb solid;
+    .warp {
+      padding: 15/360 * 100vw;
+
+      .warp_btn {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        color: #bbb;
+        padding: 10px 0;
+        .warp_user {
+          display: flex;
+          p:first-child {
+            color: #000;
+            font-size: 14/360 * 100vw;
+          }
+          img {
+            width: 40/360 * 100vw;
+            height: 40/360 * 100vw;
+            border-radius: 50%;
+            margin-right: 10px;
+          }
+        }
+      }
+      .title {
+        font-size: 16/360 * 100vw;
+        margin-top: 10px;
+      }
+    }
+  }
 }
 </style>
