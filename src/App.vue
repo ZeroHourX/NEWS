@@ -18,6 +18,7 @@ export default {
 <style>
 @import url(http://at.alicdn.com/t/font_1587733_x5zqi8f7dxo.css);
 @import url(../node_modules/vant/lib/index.css);
+@import url(../node_modules/dplayer/dist/DPlayer.min.css);
 html,
 body,
 #app {
